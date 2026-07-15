@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Desafio Técnico Frontend · Painel de Margem do Catálogo</title>
+<style>
+  :root {
+    --bg: #0d0f12;
+    --panel: #15181d;
+    --line: #24282f;
+    --text: #e7e9ec;
+    --muted: #9098a2;
+    --accent: #44DC98;
+    --code-bg: #191d23;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.65;
+    font-size: 16px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 56px 24px 80px; }
+  .kicker {
+    color: var(--accent); font-size: 13px; font-weight: 600;
+    letter-spacing: .08em; text-transform: uppercase; margin: 0 0 10px;
+  }
+  h1 { font-size: 30px; line-height: 1.2; margin: 0 0 20px; font-weight: 680; letter-spacing: -.01em; }
+  h2 { font-size: 20px; margin: 44px 0 14px; font-weight: 640; letter-spacing: -.01em; }
+  p { margin: 0 0 16px; color: #d7dade; }
+  strong { color: var(--text); font-weight: 640; }
+  .lead { font-size: 18px; color: var(--text); }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  hr { border: none; border-top: 1px solid var(--line); margin: 40px 0; }
+  ul, ol { margin: 0 0 16px; padding-left: 22px; }
+  li { margin: 0 0 10px; color: #d7dade; }
+  li strong { color: var(--text); }
+  .rules {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 12px; padding: 20px 24px; margin: 0 0 8px;
+  }
+  .rules ul { margin: 0; list-style: none; padding: 0; }
+  .rules li { margin: 0 0 12px; padding-left: 22px; position: relative; }
+  .rules li:last-child { margin-bottom: 0; }
+  .rules li::before { content: "\2192"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+
+  .biz {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 12px; padding: 20px 24px; margin: 0 0 16px;
+  }
+  .biz ul { margin: 0; list-style: none; padding: 0; }
+  .biz li { margin: 0 0 14px; padding-left: 22px; position: relative; }
+  .biz li:last-child { margin-bottom: 0; }
+  .biz li::before { content: "\2022"; position: absolute; left: 4px; color: var(--accent); font-weight: 700; }
+
+  .download {
+    display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 12px; padding: 20px 24px; margin: 8px 0 0;
+  }
+  .download .txt { flex: 1; min-width: 200px; }
+  .download .txt b { color: var(--text); }
+  .download .txt span { color: var(--muted); font-size: 14px; }
+  .download button {
+    background: var(--accent); color: #06130c; border: none;
+    font-weight: 650; font-size: 15px; padding: 12px 22px;
+    border-radius: 9px; cursor: pointer; transition: opacity .15s; white-space: nowrap;
+  }
+  .download button:hover { opacity: .88; }
+
+  .foot {
+    margin-top: 44px; padding-top: 24px; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 15px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="kicker">Desafio Técnico Frontend &middot; Volix</p>
+  <h1>Painel de Margem do Catálogo</h1>
+
+  <p class="lead">Um cliente exportou o catálogo de produtos diretamente do ERP e precisa de visibilidade sobre a saúde de margem do portfólio: quais produtos geram lucro, quais operam no prejuízo e onde está concentrado o resultado. Sua tarefa é construir esse painel.</p>
+
+  <p>Os dados estão disponíveis abaixo, <strong>exatamente como foram exportados do ERP do cliente</strong>.</p>
+
+  <hr>
+
+  <h2>Condições do desafio</h2>
+  <div class="rules">
+    <ul>
+      <li><strong>40 minutos.</strong> Queremos observar como você pensa, prioriza e valida.</li>
+      <li><strong>O uso de IA é obrigatório.</strong> Copilot, Cursor, Claude, ChatGPT — de sua preferência. Estruture seu ambiente da forma como você trabalha: skills, agents, prompts salvos, tudo liberado. Não avaliamos memorização de sintaxe; avaliamos como você conduz a ferramenta e, principalmente, se você verifica o que ela devolve.</li>
+      <li><strong>React ou Next.js, a sua escolha.</strong> Paleta de cores, biblioteca de UI e de gráficos ficam a seu critério. Registre em uma linha o que escolheu e por quê.</li>
+      <li><strong>Você constrói tudo do zero.</strong> Fornecemos apenas os dados do catálogo, disponíveis abaixo.</li>
+    </ul>
+  </div>
+
+  <div class="download">
+    <div class="txt">
+      <b>Dados do catálogo</b><br>
+      <span>20 produtos &middot; JSON &middot; adicione à raiz do seu projeto</span>
+    </div>
+    <button id="download">Baixar dados</button>
+  </div>
+
+  <h2>Regras de negócio</h2>
+
+  <p>Cada produto do catálogo possui preço de venda, custo unitário de aquisição e demanda mensal (unidades vendidas por mês). A partir desses dados, o painel deve apresentar os seguintes indicadores — <strong>a tradução das regras em cálculo é parte da sua entrega</strong>:</p>
+
+  <div class="biz">
+    <ul>
+      <li><strong>Receita mensal do produto:</strong> corresponde ao preço de venda aplicado sobre o volume de demanda mensal.</li>
+      <li><strong>Lucro mensal do produto:</strong> corresponde ao que resta da receita mensal após descontado o custo de aquisição de todas as unidades vendidas no período.</li>
+      <li><strong>Margem do produto:</strong> representa a participação percentual do lucro unitário sobre o <strong>preço de venda</strong> — não sobre o custo.</li>
+      <li><strong>Margem consolidada do catálogo:</strong> deve refletir a rentabilidade real do portfólio como um todo, considerando que os produtos têm pesos muito diferentes no resultado.</li>
+    </ul>
+  </div>
+
+  <p>Demais decisões de cálculo e tratamento são suas. Registre no README o que decidiu e a justificativa.</p>
+
+  <h2>O que construir</h2>
+
+  <p><strong>O visual é seu, mas a tela precisa conter estas três peças:</strong></p>
+
+  <ol>
+    <li><strong>Tabela do catálogo.</strong> Uma linha por produto: nome, preço, custo, margem %, receita e lucro. Com <strong>busca por nome</strong> e <strong>ordenação por margem</strong> ao clicar no cabeçalho da coluna.</li>
+    <li><strong>Gráfico.</strong> Os 10 produtos de maior lucro mensal. Barras, ou o formato que melhor comunicar a informação.</li>
+    <li><strong>Card de resumo.</strong> Receita total, lucro total e a margem consolidada do catálogo.</li>
+  </ol>
+
+  <p>Todos os valores monetários em real (R$), com formatação brasileira. Caso o escopo não caiba em 40 minutos, <strong>priorize e registre o que ficou de fora e por quê</strong>.</p>
+
+  <h2>Entrega</h2>
+
+  <p>Publique a solução em um <strong>repositório público</strong> no GitHub e encaminhe o link para <a href="mailto:alice.ramalho@volix.com.br">alice.ramalho@volix.com.br</a>, onde será feita a avaliação detalhada.</p>
+
+  <p>No README do repositório: a linha sobre as bibliotecas escolhidas e um parágrafo sobre as prioridades e decisões tomadas durante o desenvolvimento.</p>
+
+  <p class="foot">Em resumo: um painel enxuto, dados reais de cliente, e a pergunta que orienta toda a avaliação — os números apresentados na tela estão corretos? Bom trabalho.</p>
+
+</div>
+
+<script>
+const data = [
+  { "id": "P01", "nome": "Fone Bluetooth",        "preco": 129.90,     "custo": 68,   "demanda": 950 },
+  { "id": "P02", "nome": "Teclado Mecânico",      "preco": "1.299,90", "custo": 720,  "demanda": 180 },
+  { "id": "P03", "nome": "Mouse Sem Fio",         "preco": 89.90,      "custo": 41,   "demanda": 1200 },
+  { "id": "P04", "nome": "Hub USB-C",             "preco": 149,        "custo": null, "demanda": 430 },
+  { "id": "P05", "nome": "Webcam Full HD",        "preco": 199.90,     "custo": 118,  "demanda": 510 },
+  { "id": "P06", "nome": "Brinde Adesivos",       "preco": 0,          "custo": 2.5,  "demanda": 3000 },
+  { "id": "P07", "nome": "Cabo USB-C 2m",         "preco": 29.90,      "custo": 9,    "demanda": 4800 },
+  { "id": "P08", "nome": "Monitor 24\"",          "preco": 899,        "custo": 610,  "demanda": 140 },
+  { "id": "P09", "nome": "Suporte Notebook",      "preco": 99.90,      "custo": 38,   "demanda": 620 },
+  { "id": "P10", "nome": "Caixa de Som BT",       "preco": "249,90",   "custo": 132,  "demanda": 380 },
+  { "id": "P11", "nome": "Película de Vidro",     "preco": 24.90,      "custo": 4.8,  "demanda": 5200 },
+  { "id": "P12", "nome": "Power Bank 20000mAh",   "preco": 179.90,     "custo": 205,  "demanda": 260 },
+  { "id": "P13", "nome": "Ring Light",            "preco": 139,        "custo": 71,   "demanda": 340 },
+  { "id": "P14", "nome": "Microfone Lapela",      "preco": 84.90,      "custo": 37,   "demanda": 780 },
+  { "id": "P15", "nome": "Smartwatch Básico",     "preco": 319,        "custo": null, "demanda": 290 },
+  { "id": "P16", "nome": "Carregador 30W",        "preco": 79.90,      "custo": 42,   "demanda": 1500 },
+  { "id": "P17", "nome": "Mousepad Gamer XL",     "preco": 59.90,      "custo": 21,   "demanda": 830 },
+  { "id": "P18", "nome": "Adaptador HDMI 4K",     "preco": 69.90,      "custo": 27,   "demanda": 960 },
+  { "id": "P19", "nome": "Cartão SD 256GB",       "preco": 119.90,     "custo": 74,   "demanda": 1100 },
+  { "id": "P20", "nome": "Estabilizador Celular", "preco": 289,        "custo": 176,  "demanda": 210 }
+];
+
+document.getElementById("download").addEventListener("click", () => {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "data.json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+</script>
+</body>
+</html>
